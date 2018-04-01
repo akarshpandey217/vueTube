@@ -1,18 +1,17 @@
 <template>
     <v-toolbar
-      color="red"
       dense
       fixed
       clipped-left
       app
     >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon ></v-toolbar-side-icon>
       <v-icon class="mx-3">fab fa-youtube</v-icon>
-      <img src="../../assets/logo3.png" id="appLogo"/>
       <v-toolbar-title class="mr-5 align-center">
+        <img fluid src="../../assets/logo3.png" id="appLogo" @click="goHome"/>
       </v-toolbar-title>
-      <v-spacer></v-spacer>
       <v-layout row align-center style="max-width: 650px">
+        <v-spacer></v-spacer>
         <form @submit="sendText">
         <v-text-field
           placeholder="Search..."
@@ -28,7 +27,7 @@
 </template>
 
 <script>
-import all from '../scriptFiles/serviceLayer'
+import { EventBus } from '../scriptFiles/eventBus'
 export default {
   name: 'PageHeader',
   data(){
@@ -36,12 +35,16 @@ export default {
       searchText:''
     }
   },
-  methods: {
-    sendText() {
-      // Send the event on a channel (i-got-clicked) with a payload (the click count.)
-      all.search(this.searchText);
+  methods:{
+    sendText(){
+      EventBus.$emit('recieveSearchText',this.searchText);
+    },
+    goHome(){
+      this.searchText = '';
+      EventBus.$emit('recieveSearchText',this.searchText);
     }
   }
+ 
   }
   
 </script>
@@ -50,5 +53,9 @@ export default {
 <style scoped>
 #appLogo{
 height: 40px;
+cursor: pointer;
+}
+.mx-3{
+  flex: 0.5
 }
 </style>
