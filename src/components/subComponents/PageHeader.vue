@@ -6,12 +6,13 @@
       app
     >
       <v-toolbar-side-icon ></v-toolbar-side-icon>
-      <v-icon class="mx-3">fab fa-youtube</v-icon>
+      <v-icon class="mx-2">fab fa-youtube</v-icon>
       <v-toolbar-title class="mr-5 align-center">
-        <img fluid src="../../assets/logo3.png" id="appLogo" @click="goHome"/>
+        <img style="width:80%" src="../../assets/logo3.png" id="appLogo" @click="goHome"/>
       </v-toolbar-title>
-      <v-layout row align-center style="max-width: 650px">
-        <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <v-layout row  style="max-width: 750px">
+        
         <form @submit="sendText">
         <v-text-field
           placeholder="Search..."

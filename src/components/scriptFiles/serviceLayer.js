@@ -26,7 +26,8 @@ function search(searchText) {
     return Promise.resolve(
       window.gapi.client.youtube.search.list({
         q: searchText,
-        part: "snippet"
+        part: "snippet",
+        maxResults: 20
       })
     )
       .then(response => {

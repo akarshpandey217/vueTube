@@ -1,14 +1,25 @@
 <template>
-<div>
-<iframe id="ytplayer" type="text/html" width="640" height="360"
-  src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
+<div class="youPlayer" >
+<iframe id="ytplayer" type="text/html" width="100%" height="580px" v-bind:src='url'
   frameborder="0"></iframe>
 </div>
 </template>
 
 <script>
-
+import { EventBus } from '../../scriptFiles/eventBus'
 export default {
-  name: 'yPlayer'
+  name: 'yPlayer',
+  data(){
+    return{
+      url:''
+    }
+  },
+  mounted() {
+    EventBus.$on("playVideo", videoId => {
+      this.url = `https://www.youtube.com/embed/${videoId}?autoplay=1&origin=http://example.com`;
+      console.log(this.url);
+    });
+  }
+  
 }
 </script>
