@@ -27,7 +27,26 @@ function search(searchText) {
       window.gapi.client.youtube.search.list({
         q: searchText,
         part: "snippet",
-        maxResults: 20
+        maxResults: 20,
+        regionCode: 'IN'
+      })
+    )
+      .then(response => {
+        return response.result;
+      })
+      .catch(reason => {
+        return reason.result.error.message;
+      });
+  });
+}
+function searchCharts(searchChartText) {
+  return initiate().then(() => {
+    return Promise.resolve(
+      window.gapi.client.youtube.videos.list({
+        chart: searchChartText.split(" ").join("").toLowerCase(),
+        part: "snippet",
+        maxResults: 20,
+        regionCode: "IN"
       })
     )
       .then(response => {
@@ -39,5 +58,5 @@ function search(searchText) {
   });
 }
 export default {
-  search
+  search,searchCharts
 };

@@ -1,16 +1,20 @@
 <template>
-<v-container id="body" style="width:90%">
+<v-container id="app" style="width:85%">
+  <chart-drawer></chart-drawer>
+  <suggestion-darwer></suggestion-darwer>
   <v-content>
     <v-layout wrap>
       <v-flex >
-        <v-card class="primaryCard" > 
-          <y-player width="100%" v-if="startPlay"></y-player>
+        <v-card color="grey darken-4">
+        <y-player></y-player>  
+        </v-card>
+        <v-card color="grey darken-4">
           <v-layout  wrap row justify-center="true" >
-            <v-flex class="videoFlex" justify-space-between="true" xs10 sm4 md3 lg2 xl2 v-for="result in items" :key="result.id.videoId">
+            <v-flex class="videoFlex" justify-space-between="true" xs12 sm4 md3 lg2 xl2 v-for="result in items" :key="result.id">
               <v-card style="height:100%">
-                <img v-on:click="playVid(result.id.videoId)" v-bind:src= "result.snippet.thumbnails.medium.url" style="width:100%;cursor:pointer"/>
+                <img v-on:click="playVid(result.id)" v-bind:src= "result.snippet.thumbnails.medium.url" style="width:100%;cursor:pointer"/>
                 <v-card-text>
-                  <div v-on:click="playVid(result.id.videoId)" class="videoDetails">
+                  <div v-on:click="playVid(result.id)" class="videoDetails">
                   <h3>{{result.snippet.title}}</h3>
                   <div>{{result.snippet.channelTitle}} <br></div>
                   </div>
@@ -30,32 +34,43 @@ import all from "../scriptFiles/serviceLayer";
 import PageHeader from "./PageHeader";
 import { EventBus } from "../scriptFiles/eventBus";
 import yPlayer from "./bodyComponents/yPlayer";
+import chartDrawer from './bodyComponents/chartsDrawer';
+import suggestionsDrawer from './bodyComponents/suggestionsDrawer';
 export default {
   name: "PageBody",
   components:{
-    'y-player':yPlayer
+    'y-player':yPlayer,
+    'chart-drawer' : chartDrawer,
+    'suggestion-darwer': suggestionsDrawer
   },
 
   data() {
     return {
       items: [],
-      startPlay: false
+      startPlay: false,
     };
   },
   methods: {
     showThumbs(results) {
+      
+      results.items.forEach(element => {
+        typeof(element.id) != "string"? element.id = element.id.videoId:element.id = element.id;
+      });
       this.items = results.items;
       console.log(this.items)
     },
     playVid : function(key) {
       EventBus.$emit('playVideo',key);
-      this.startPlay = true;
     }
   },
   mounted() {
     all.search("").then(this.showThumbs);
     EventBus.$on("recieveSearchText", searchText => {
       all.search(searchText).then(this.showThumbs);
+    });
+    EventBus.$on("searchCharts", key => {
+      all.searchCharts(key).then(this.showThumbs); 
+      this.startPlay = true;
     });
   }
 };
@@ -75,7 +90,7 @@ export default {
   border-radius: 7px;
 }
 .videoFlex{
-  padding: 5px;
+  padding: 7px;
 }
 .card{
   height: 100%

@@ -15,3 +15,25 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+// var tag = document.createElement('script');
+
+//       tag.src = "https://www.youtube.com/iframe_api";
+//       var firstScriptTag = document.getElementsByTagName('script')[0];
+//       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+
+// window.onYouTubeIframeAPIReady = function(){
+//   console.log('play ready');
+  
+//   window.player = new YT.Player('sexyplayer', {
+//     height: '390',
+//     width: '640',
+//     videoId: 'M7lc1UVf-VE',
+//     events: {
+//       'onReady': function onPlayerReady(event) {
+//         event.target.playVideo();
+//       }
+//     }
+//   });
+// }

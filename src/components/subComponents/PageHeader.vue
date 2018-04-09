@@ -1,17 +1,17 @@
 <template>
+<div>
     <v-toolbar
       dense
       fixed
       clipped-left
       app
     >
-      <v-toolbar-side-icon ></v-toolbar-side-icon>
-      <v-icon class="mx-2">fab fa-youtube</v-icon>
+      <v-toolbar-side-icon v-on:click="toggleDrawer(1)" ></v-toolbar-side-icon>
       <v-toolbar-title class="mr-5 align-center">
         <img style="width:80%" src="../../assets/logo3.png" id="appLogo" @click="goHome"/>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-layout row  style="max-width: 750px">
+      <v-layout row style="max-width: 750px">
         
         <form @submit="sendText">
         <v-text-field
@@ -24,7 +24,9 @@
           v-model="searchText"
         ></v-text-field></form>
       </v-layout>
+      <v-toolbar-side-icon v-on:click="toggleDrawer(2)" ></v-toolbar-side-icon>
     </v-toolbar>
+</div>
 </template>
 
 <script>
@@ -33,7 +35,9 @@ export default {
   name: 'PageHeader',
   data(){
     return {
-      searchText:''
+      searchText:'',
+      drawer : false,
+      drawer2: true,
     }
   },
   methods:{
@@ -43,6 +47,9 @@ export default {
     goHome(){
       this.searchText = '';
       EventBus.$emit('recieveSearchText',this.searchText);
+    },
+    toggleDrawer(value){
+      EventBus.$emit('toggleDrawer', value);
     }
   }
  
@@ -53,7 +60,8 @@ export default {
 
 <style scoped>
 #appLogo{
-height: 40px;
+max-height: 40px;
+display: block;
 cursor: pointer;
 }
 .mx-3{
