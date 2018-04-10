@@ -1,9 +1,8 @@
 <template>
   <v-navigation-drawer
-        v-model="drawer"
+        v-model="drawerOpen"
         app
         clipped
-        hide-overlay
         v-bind:permanent="drawer"
         width=250
       >
@@ -44,25 +43,34 @@ export default {
     data() {
         return {
         drawer:false,
+        drawerOpen:false,
         chartList: [
             { icon: 'trending_up', text: 'Most Popular' },
             { icon: 'subscriptions', text: 'Music' },
             { icon: 'history', text: 'Sports' },
-            { icon: 'featured_play_list', text: 'Tehchnology' },
+            { icon: 'featured_play_list', text: 'Technology' },
             { icon: 'watch_later', text: 'Movies' }
-        ],
+        ]
         };
     },
     methods: {
         searchCharts : function(key) {
             EventBus.$emit('searchCharts',key);
             console.log(key);
-    }
+        }
     },
     mounted() {
         EventBus.$on("toggleDrawer", (value) => {
           if(value === 1){
-            this.drawer = !this.drawer;
+            if(window.innerWidth>720)
+            {
+              this.drawer = !this.drawer;
+              EventBus.$emit('resizeBody', drawer);
+            }
+            else{
+              this.drawer = false;
+            }
+            this.drawerOpen = !this.drawerOpen;
           }    
         });
     }

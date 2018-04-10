@@ -1,5 +1,5 @@
 <template>
-<v-container id="app" style="width:85%">
+<v-container id="app" stretch style="width:85%">
   <chart-drawer></chart-drawer>
   <suggestion-darwer></suggestion-darwer>
   <v-content>
@@ -15,8 +15,11 @@
                 <img v-on:click="playVid(result.id)" v-bind:src= "result.snippet.thumbnails.medium.url" style="width:100%;cursor:pointer"/>
                 <v-card-text>
                   <div v-on:click="playVid(result.id)" class="videoDetails">
-                  <h3>{{result.snippet.title}}</h3>
-                  <div>{{result.snippet.channelTitle}} <br></div>
+                  <div style="overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical">{{result.snippet.title}}</div>
+                  <div id="text2">{{result.snippet.channelTitle}} <br></div>
                   </div>
                 </v-card-text> 
               </v-card>
@@ -101,4 +104,11 @@ export default {
   text-overflow: ellipsis;
   cursor: pointer;
 }
+#text2{
+  font-weight:200;
+  font-stretch:narrower;
+  font-size: smaller;
+  font-family: Arial, Helvetica, sans-serif
+}
+
 </style>

@@ -40,13 +40,32 @@ function search(searchText) {
   });
 }
 function searchCharts(searchChartText) {
+  var categoryId;
+  switch(searchChartText.toLowerCase()){
+    case "music":
+      categoryId = 10
+      break;
+      case "most popular":
+      categoryId = null;
+      break;
+      case "sports":
+      categoryId = 17;
+      break;
+      case "technology":
+      categoryId = 28;
+      break;
+      case "movies":
+      categoryId = 1;
+      break;
+  }
   return initiate().then(() => {
     return Promise.resolve(
       window.gapi.client.youtube.videos.list({
-        chart: searchChartText.split(" ").join("").toLowerCase(),
+        chart: 'mostpopular',
         part: "snippet",
         maxResults: 20,
-        regionCode: "IN"
+        regionCode:'IN',
+        videoCategoryId : categoryId
       })
     )
       .then(response => {

@@ -4,7 +4,6 @@
         app
         clipped
         hide-overlay
-        v-bind:permanent="drawer2"
         right
       >
       </v-navigation-drawer>
