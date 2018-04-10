@@ -65,7 +65,7 @@ export default {
             if(window.innerWidth>720)
             {
               this.drawer = !this.drawer;
-              EventBus.$emit('resizeBody', drawer);
+              EventBus.$emit('resizeBody', this.drawer);
             }
             else{
               this.drawer = false;

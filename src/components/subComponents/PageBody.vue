@@ -10,7 +10,7 @@
         </v-card>
         <v-card color="grey darken-4">
           <v-layout  wrap row justify-center="true" >
-            <v-flex class="videoFlex" justify-space-between="true" xs12 sm4 md3 lg2 xl2 v-for="result in items" :key="result.id">
+            <v-flex class="videoFlex" justify-space-between="true" xs12 sm4 md3 lg3 xl2 v-for="result in items" :key="result.id">
               <v-card style="height:100%">
                 <img v-on:click="playVid(result.id)" v-bind:src= "result.snippet.thumbnails.medium.url" style="width:100%;cursor:pointer"/>
                 <v-card-text>

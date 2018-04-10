@@ -3,7 +3,6 @@
         v-model="drawer2"
         app
         clipped
-        hide-overlay
         right
       >
       </v-navigation-drawer>
