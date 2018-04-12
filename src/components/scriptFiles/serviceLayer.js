@@ -27,7 +27,7 @@ function search(searchText) {
       window.gapi.client.youtube.search.list({
         q: searchText,
         part: "snippet",
-        maxResults: 20,
+        maxResults: 24,
         regionCode: 'IN'
       })
     )
@@ -40,31 +40,34 @@ function search(searchText) {
   });
 }
 function searchCharts(searchChartText) {
-  var categoryId;
-  switch(searchChartText.toLowerCase()){
-    case "music":
-      categoryId = 10
-      break;
-      case "most popular":
-      categoryId = null;
-      break;
-      case "sports":
-      categoryId = 17;
-      break;
-      case "technology":
-      categoryId = 28;
-      break;
-      case "movies":
-      categoryId = 1;
-      break;
+  var categoryId=''
+    switch(searchChartText.toLowerCase()){
+      case "music":
+        categoryId = 10
+        break;
+        case "most popular":
+        categoryId = null;
+        break;
+        case "sports":
+        categoryId = 17;
+        break;
+        case "technology":
+        categoryId = 28;
+        break;
+        case "movies":
+        categoryId = 1;
+        break;
+        default:
+        categoryId = null;
+        break;
   }
+  
   return initiate().then(() => {
     return Promise.resolve(
       window.gapi.client.youtube.videos.list({
         chart: 'mostpopular',
-        part: "snippet",
-        maxResults: 20,
-        regionCode:'IN',
+        part: "snippet,contentDetails,statistics",
+        maxResults: 24,
         videoCategoryId : categoryId
       })
     )
@@ -76,6 +79,41 @@ function searchCharts(searchChartText) {
       });
   });
 }
+function fetchStats(videoIdList) {
+  return initiate().then(() => {
+    return Promise.resolve(
+      window.gapi.client.youtube.videos.list({
+        part: "statistics",
+        id:videoIdList
+      })
+    )
+      .then(response => {
+        return response.result;
+      })
+      .catch(reason => {
+        return reason.result.error.message;
+      });
+  });
+}
+
+
+function fetchComments(videoId) {
+  return initiate().then(() => {
+    return Promise.resolve(
+      window.gapi.client.youtube.commentThreads.list({
+        part: "snippet",
+        maxResults: 10,
+        videoId : videoId
+      })
+    )
+      .then(response => {
+        return response.result;
+      })
+      .catch(reason => {
+        return reason.result.error.message;
+      });
+  });
+}
 export default {
-  search,searchCharts
+  search,searchCharts, fetchComments, fetchStats
 };

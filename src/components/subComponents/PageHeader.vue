@@ -12,8 +12,6 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-layout row style="max-width: 750px">
-        
-        <form @submit="sendText">
         <v-text-field
           placeholder="Search..."
           single-line
@@ -21,8 +19,9 @@
           :append-icon-cb= "sendText"
           color="white"
           hide-details
+          @keyup.enter="sendText"
           v-model="searchText"
-        ></v-text-field></form>
+        ></v-text-field>
       </v-layout>
       <v-toolbar-side-icon v-on:click="toggleDrawer(2)" ></v-toolbar-side-icon>
     </v-toolbar>

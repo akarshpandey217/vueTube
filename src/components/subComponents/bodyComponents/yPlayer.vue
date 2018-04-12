@@ -1,6 +1,9 @@
 <template>
+<div>
 <div v-show="showVid" class="videowrapper">
 <div id="youPlayer"></div>
+</div>
+<h1 v-if="showVid">{{videoTitle}}</h1>
 </div>
 </template>
 
@@ -8,6 +11,7 @@
 import { EventBus } from '../../scriptFiles/eventBus'
 export default {
   name: 'yPlayer',
+  props:['videoTitle'],
   data(){
     return{
       videoId:'',
@@ -17,16 +21,8 @@ export default {
   methods:{
     playVideo(){
       return window.onYouTubeIframeAPIReady().then((resolve)=>{
-          console.log(resolve);
-            if(resolve){
-              resolve.loadVideoById(this.videoId, 0, "large");
-            return Promise.resolve(true);
-            }
-            else{
-              return Promise.resolve(false);
-            }
-      
-    })
+                return Promise.resolve(resolve);
+              })
   }
   },
   mounted() {
@@ -47,7 +43,15 @@ export default {
       }
     EventBus.$on("playVideo", videoId => {
       this.videoId = videoId;
-      this.playVideo().then((resolve)=>{this.showVid=true;console.log(resolve)});
+      this.playVideo().then((resolve)=>{
+        resolve.loadVideoById(this.videoId, 0, "large");
+        this.showVid=true;});
+    });
+    EventBus.$on("stopVideo",() => {
+      this.playVideo().then((resolve)=>{
+          resolve.stopVideo();
+        })
+        this.showVid=false;;
     });
   }
   

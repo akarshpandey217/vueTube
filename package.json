@@ -11,8 +11,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@mdi/font": "^2.2.43",
     "axios": "^0.18.0",
     "bootstrap-vue": "^2.0.0-rc.4",
+    "lodash": "^4.17.5",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vue-touch": "^1.1.0",

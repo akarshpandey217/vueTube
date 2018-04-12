@@ -3,8 +3,8 @@
         v-model="drawerOpen"
         app
         clipped
-        v-bind:permanent="drawer"
         width=250
+        static  
       >
       <v-list dense>
         <v-list-tile v-for="item in chartList" v-bind:key="item.text">
@@ -42,34 +42,24 @@ export default {
     name:'chartDrawer',
     data() {
         return {
-        drawer:false,
         drawerOpen:false,
         chartList: [
             { icon: 'trending_up', text: 'Most Popular' },
             { icon: 'subscriptions', text: 'Music' },
             { icon: 'history', text: 'Sports' },
             { icon: 'featured_play_list', text: 'Technology' },
-            { icon: 'watch_later', text: 'Movies' }
-        ]
+            { icon: 'watch_later', text: 'Trending' }
+        ],
         };
     },
     methods: {
         searchCharts : function(key) {
             EventBus.$emit('searchCharts',key);
-            console.log(key);
         }
     },
     mounted() {
         EventBus.$on("toggleDrawer", (value) => {
           if(value === 1){
-            if(window.innerWidth>720)
-            {
-              this.drawer = !this.drawer;
-              EventBus.$emit('resizeBody', this.drawer);
-            }
-            else{
-              this.drawer = false;
-            }
             this.drawerOpen = !this.drawerOpen;
           }    
         });

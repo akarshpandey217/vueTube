@@ -4,6 +4,7 @@
         app
         clipped
         right
+        temporary
       >
       </v-navigation-drawer>
 </template>
