@@ -15,5 +15,6 @@ export default new Router({
       name: 'MainPage',
       component: MainPage
     }
-  ]
+  ],
+  mode:"history"
 })

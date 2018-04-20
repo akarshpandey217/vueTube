@@ -8,7 +8,8 @@
     >
       <v-toolbar-side-icon v-on:click="toggleDrawer(1)" ></v-toolbar-side-icon>
       <v-toolbar-title class="mr-5 align-center">
-        <img style="width:80%" src="../../assets/logo3.png" id="appLogo" @click="goHome"/>
+        <img style="width:80%" v-if="dark" src="../../assets/logo3.png" id="appLogo" @click="goHome"/>
+        <img style="width:80%" v-else src="../../assets/logo4.png" id="appLogo" @click="goHome"/>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-layout row style="max-width: 750px">
@@ -23,7 +24,7 @@
           v-model="searchText"
         ></v-text-field>
       </v-layout>
-      <v-toolbar-side-icon v-on:click="toggleDrawer(2)" ></v-toolbar-side-icon>
+      <v-toolbar-side-icon v-if="enableSuggestionsDrawer" v-on:click="toggleDrawer(2)" ></v-toolbar-side-icon>
     </v-toolbar>
 </div>
 </template>
@@ -35,8 +36,8 @@ export default {
   data(){
     return {
       searchText:'',
-      drawer : false,
-      drawer2: true,
+      enableSuggestionsDrawer:false,
+      dark:false
     }
   },
   methods:{
@@ -50,6 +51,17 @@ export default {
     toggleDrawer(value){
       EventBus.$emit('toggleDrawer', value);
     }
+  },
+  mounted(){
+    EventBus.$on("playVideo", key => {
+      this.enableSuggestionsDrawer = true;
+    });
+    EventBus.$on("stopVideo", key => {
+      this.enableSuggestionsDrawer = false;
+    });
+    EventBus.$on("changeTheme" ,()=> {
+      this.dark =!this.dark;
+    });
   }
  
   }

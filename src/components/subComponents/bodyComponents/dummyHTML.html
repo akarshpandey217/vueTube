@@ -1,60 +1,24 @@
 <div id="app">
-  <v-app id="inspire">
-    <v-container fluid grid-list-md>
-      <v-layout row wrap>
-        <v-flex d-flex xs12 sm6 md4>
-          <v-card color="purple" dark>
-            <v-card-title primary class="title">Lorem</v-card-title>
-            <v-card-text
-            v-text="lorem">
-            </v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex d-flex xs12 sm6 md3>
-          <v-layout row wrap>
-            <v-flex d-flex>
-              <v-card color="indigo" dark>
-                <v-card-text
-                v-text="lorem.slice(0, 70)">
-                </v-card-text>
-              </v-card>
-            </v-flex>
-            <v-flex d-flex>
-              <v-layout row wrap>
-                <v-flex
-                  d-flex
-                  v-for="n in 2"
-                  :key="n"
-                  xs12
-                >
-                  <v-card
-                    color="red lighten-2"
-                    dark
-                  >
-                    <v-card-text
-                    v-text="lorem.slice(0, 40)">
-                    </v-card-text>
-                  </v-card>
-                </v-flex>
-              </v-layout>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-        <v-flex d-flex xs12 sm6 md2 child-flex>
-          <v-card color="green lighten-2" dark>
-            <v-card-text
-            v-text="lorem.slice(0, 90)">
-            </v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex d-flex xs12 sm6 md3>
-          <v-card color="blue lighten-2" dark>
-            <v-card-text
-            v-text="lorem.slice(0, 100)">
-            </v-card-text>
+    <v-app id="inspire">
+      <v-layout row>
+        <v-flex xs12 sm6 offset-sm3>
+            <v-list three-line>
+              <template v-for="(item, index) in items">
+                <v-subheader v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
+                <v-divider v-else-if="item.divider" :inset="item.inset" :key="index"></v-divider>
+                <v-list-tile avatar v-else :key="item.title" @click="">
+                  <v-list-tile-avatar>
+                    <img :src="item.avatar">
+                  </v-list-tile-avatar>
+                  <v-list-tile-content>
+                    <v-list-tile-title v-html="item.title"></v-list-tile-title>
+                    <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </template>
+            </v-list>
           </v-card>
         </v-flex>
       </v-layout>
-    </v-container>
-  </v-app>
-</div>
+    </v-app>
+  </div>

@@ -21,13 +21,16 @@ function initiate() {
     });
   }
 }
-function search(searchText) {
+function search(searchText,relatedToVideoId,maxResults = 24 ) {
+  console.log(relatedToVideoId);
   return initiate().then(() => {
     return Promise.resolve(
       window.gapi.client.youtube.search.list({
         q: searchText,
         part: "snippet",
-        maxResults: 24,
+        maxResults: maxResults,
+        relatedToVideoId: relatedToVideoId,
+        type: "video",
         regionCode: 'IN'
       })
     )
@@ -68,7 +71,8 @@ function searchCharts(searchChartText) {
         chart: 'mostpopular',
         part: "snippet,contentDetails,statistics",
         maxResults: 24,
-        videoCategoryId : categoryId
+        videoCategoryId : categoryId,
+        regionCode: 'IN'
       })
     )
       .then(response => {
@@ -97,13 +101,15 @@ function fetchStats(videoIdList) {
 }
 
 
-function fetchComments(videoId) {
+function fetchComments(videoId,channelId,order = "relevance") {
+  var channelId = channelId;
   return initiate().then(() => {
     return Promise.resolve(
       window.gapi.client.youtube.commentThreads.list({
-        part: "snippet",
+        part: "snippet,replies",
         maxResults: 10,
-        videoId : videoId
+        videoId : videoId,
+        order: order
       })
     )
       .then(response => {

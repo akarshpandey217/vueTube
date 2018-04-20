@@ -1,14 +1,13 @@
 <template>
-<v-container id="app" stretch style="width:95%">
+<v-content >
   <chart-drawer></chart-drawer>
-  <suggestion-darwer></suggestion-darwer>
-  <v-content>
-    <v-layout wrap>
-      <v-flex >
-        <v-card color="grey darken-4">
-        <y-player v-bind:videoTitle="videoTitle"></y-player>
+  <suggestion-darwer v-if="enableSuggestionsDrawer" v-bind:suggestionsData="suggestionsData"></suggestion-darwer>
+    <v-layout row wrap>
+      <v-flex wrap xs12 sm12 md12 lg12 xl12>
+        <v-card>
+        <y-player v-bind:videoData="videoData"></y-player>
         </v-card>
-        <v-card v-if="videoStopped" color="grey darken-4">
+        <v-card v-if="videoStopped" >
           <v-layout  wrap row justify-center="true" >
             <v-flex class="videoFlex" justify-space-between="true" xs12 sm4 md3 lg2 xl2 v-for="result in items" :key="result.id">
               <v-card style="height:100%">
@@ -31,7 +30,6 @@
       </v-flex>
     </v-layout>
   </v-content>
-</v-container>
 </template>
 
 <script>
@@ -55,71 +53,87 @@ export default {
     return {
       items: [],
       videoStopped: true,
-      videoTitle : ''
+      videoData : {
+        videoTitle:'',
+        numberOfViews:'',
+        numberOfLikes:'',
+        numberOfDislikes:'',
+        numberOfComments:''
+      },
+      suggestionsData:null,
+      enableSuggestionsDrawer:false
     };
   },
   methods: {
     showThumbs(results) {
-      
       results.items.forEach(element => {
         typeof(element.id) != "string"? element.id = element.id.videoId:element.id = element.id;
       });
       this.items = results.items;
+      window.document.documentElement.scrollTop = 0;
     },
     playVid : function(key) {
-      this.videoTitle = key.snippet.title;
+      this.videoData.videoTitle = key.snippet.title;
+      this.videoData.numberOfViews = key.statistics.viewCount;
+      this.videoData.numberOfLikes = key.statistics.likeCount;
+      this.videoData.numberOfDislikes = key.statistics.dislikeCount;
+      this.videoData.numberOfComments = key.statistics.commentCount;
       this.startPlay = true;
       EventBus.$emit('playVideo',key.id);
       EventBus.$emit('fetchComments',key.id);
       this.videoStopped = false;
+      window.document.documentElement.scrollTop = 0;
+      EventBus.$emit('fetchSuggestions',key.id);
       
+    },
+    addToSuggestions : function(response){
+      this.suggestionsData = response.items;
+      console.log(this.suggestionsData);
+      this.enableSuggestionsDrawer = true;
     }
   },
   mounted() {
-    function viewCountFormatter(elem){
-      var viewCount = parseInt(elem.statistics.viewCount);
-      console.log(viewCount);
-      elem.statistics.viewCount  = viewCount > 999999?
-      (viewCount/1000000).toFixed(1).toString() +'M': viewCount > 999? 
-      (viewCount/1000).toFixed(1).toString() +'K':viewCount;
-      return elem;
-    }
-    all.search("").then((result)=>{
-      var videoIdList = '';
-      _.each(result.items,(value)=>{ videoIdList += ','+value.id.videoId});
-      all.fetchStats(videoIdList)
-      .then((stats)=>{
-        stats.items = _.map(stats.items,viewCountFormatter);
-        console.log(stats.items);
-        return Promise.resolve(_.merge(result,stats))})
-      .then(this.showThumbs)
-    });
+    
+    all.search("").then(processStatsAndShowThumbs).then(this.showThumbs);
     EventBus.$on("recieveSearchText", searchText => {
-      all.search(searchText).then((result)=>{
-      var videoIdList = '';
-      _.each(result.items,(value)=>{ videoIdList += ','+value.id.videoId});
-      all.fetchStats(videoIdList).then((stats)=>{
-        stats.items = _.map(stats.items,viewCountFormatter);
-        console.log(stats.items);
-        return Promise.resolve(_.merge(result,stats))})
-      .then(this.showThumbs)
-    });
+      all.search(searchText).then(processStatsAndShowThumbs).then(this.showThumbs);
       EventBus.$emit('stopVideo');
       this.videoStopped = true;
     });
     EventBus.$on("searchCharts", key => {
-      all.searchCharts(key).then((result)=>{
-      var videoIdList = '';
-      _.each(result.items,(value)=>{ videoIdList += ','+value.id});
-      return all.fetchStats(videoIdList).then((stats)=>{
-        stats.items = _.map(stats.items,viewCountFormatter);
-        console.log(stats.items);
-        return Promise.resolve(_.merge(result,stats))})
-      .then(this.showThumbs)
-    });
+      all.searchCharts(key).then(processStatsAndShowThumbs).then(this.showThumbs);
       EventBus.$emit('stopVideo');
       this.videoStopped = true;
     });
+    EventBus.$on("playSuggestedVideo", key => {
+      this.playVid(key);
+    });
+    EventBus.$on("fetchSuggestions", key => {
+     all.search("",key,12).then(processStatsAndShowThumbs).then(this.addToSuggestions);
+    });
+
+    /*helper functions*/ 
+    function processStatsAndShowThumbs(result){
+      var videoIdList = '';
+      _.each(result.items,(value)=>{ 
+        value.id = !value.id.videoId?value.id:value.id.videoId;
+        videoIdList += ','+value.id});
+      return all.fetchStats(videoIdList).then((stats)=>{
+        stats.items = _.map(stats.items,viewCountFormatter);
+        return Promise.resolve(_.merge(result,stats))})
+    }
+    function viewCountFormatter(elem){
+      elem.statistics.viewCount  = statsFormatter(elem.statistics.viewCount);
+      elem.statistics.likeCount = statsFormatter(elem.statistics.likeCount);
+      elem.statistics.dislikeCount = statsFormatter(elem.statistics.dislikeCount);
+      elem.statistics.commentCount = statsFormatter(elem.statistics.commentCount);
+      return elem;
+    }
+    function statsFormatter(numberToFormat){
+      return numberToFormat > 999999?
+      (numberToFormat/1000000).toFixed(1).toString() +'M': numberToFormat > 999? 
+      (numberToFormat/1000).toFixed(1).toString() +'K':numberToFormat;
+    }
   }
 };
 </script>
@@ -153,7 +167,6 @@ export default {
   font-weight:200;
   font-stretch:narrower;
   font-size: smaller;
-  font-family: Arial, Helvetica, sans-serif
 }
 
 </style>

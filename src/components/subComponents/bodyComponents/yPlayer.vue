@@ -1,9 +1,30 @@
 <template>
 <div>
-<div v-show="showVid" class="videowrapper">
-<div id="youPlayer"></div>
-</div>
-<h1 v-if="showVid">{{videoTitle}}</h1>
+  <div v-show="showVid" class="videowrapper">
+    <div id="youPlayer"></div>
+  </div>
+  <div v-if="showVid" class="vidDetails">
+    <v-layout row wrap>
+      <v-flex>
+        <v-card>
+          <div>
+            <h1 class="videoTitle">{{videoData.videoTitle}}</h1>
+            <div>
+            <h3>{{videoData.numberOfViews}} views</h3>
+            <div class="videoStats xs6" style="text-align:right">
+              <v-icon>thumb_up</v-icon>
+              &nbsp;{{videoData.numberOfLikes}} 
+              &nbsp;&nbsp;&nbsp;
+              <v-icon >thumb_down</v-icon>
+              &nbsp;{{videoData.numberOfDislikes}}
+            </div>
+            </div>
+          </div>
+          
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </div>
 </div>
 </template>
 
@@ -11,7 +32,7 @@
 import { EventBus } from '../../scriptFiles/eventBus'
 export default {
   name: 'yPlayer',
-  props:['videoTitle'],
+  props:['videoData'],
   data(){
     return{
       videoId:'',
@@ -59,7 +80,6 @@ export default {
 </script>
 <style>
 .videowrapper {
-  align-content: stretch;
     float: none;
     clear: both;
     width: 100%;
@@ -74,6 +94,15 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
+}
+#youplayer{
+  max-width: 1280px;
+}
+.icon{
+  vertical-align:middle;
+}
+.videoTitle{
+  font-family: 'Nunito', sans-serif;
 }
 </style>
 

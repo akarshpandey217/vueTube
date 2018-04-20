@@ -18,9 +18,6 @@
           </v-list-tile-content>
         </v-list-tile>
         <v-subheader class="mt-3 grey--text text--darken-1">SUBSCRIPTIONS</v-subheader>
-        <v-list>
-          
-        </v-list>
         <v-list-tile class="mt-3" >
           <v-list-tile-action>
             <v-icon color="grey darken-1">add_circle_outline</v-icon>
@@ -34,6 +31,11 @@
           <v-list-tile-title class="grey--text text--darken-1">Manage Subscriptions</v-list-tile-title>
         </v-list-tile>
       </v-list>
+      <br/>
+      <br/>
+      <div style="padding-left:20px;">
+          <v-switch @click="changeTheme" v-bind:append-icon="darkIcon" ripple v-model="themeToggleSwitch" label="Toggle Theme"></v-switch>
+      </div>
       </v-navigation-drawer>
 </template>
 <script>
@@ -45,16 +47,23 @@ export default {
         drawerOpen:false,
         chartList: [
             { icon: 'trending_up', text: 'Most Popular' },
-            { icon: 'subscriptions', text: 'Music' },
-            { icon: 'history', text: 'Sports' },
-            { icon: 'featured_play_list', text: 'Technology' },
-            { icon: 'watch_later', text: 'Trending' }
+            { icon: 'library_music', text: 'Music' },
+            { icon: 'fitness_center', text: 'Sports' },
+            { icon: 'fas fa-flask', text: 'Technology' }
         ],
+        themeToggleSwitch:false,
+        icon:'far fa-moon',
+        darkIcon:'fas fa-moon',
+        lightIcon:'fas fa-sun'
         };
     },
     methods: {
         searchCharts : function(key) {
             EventBus.$emit('searchCharts',key);
+        },
+        changeTheme(){
+          EventBus.$emit('changeTheme');
+          this.icon = this.icon ==this.darkIcon?this.lightIcon:this.darkIcon;
         }
     },
     mounted() {
