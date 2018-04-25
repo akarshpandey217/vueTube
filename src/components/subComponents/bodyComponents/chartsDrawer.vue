@@ -34,7 +34,7 @@
       <br/>
       <br/>
       <div style="padding-left:20px;">
-          <v-switch @click="changeTheme" v-bind:append-icon="darkIcon" ripple v-model="themeToggleSwitch" label="Toggle Theme"></v-switch>
+          <v-switch @click="changeTheme" color="light" v-bind:append-icon="darkIcon" ripple v-model="themeToggleSwitch" label="Toggle Theme"></v-switch>
       </div>
       </v-navigation-drawer>
 </template>

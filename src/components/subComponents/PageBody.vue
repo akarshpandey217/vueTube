@@ -1,9 +1,9 @@
 <template>
-<v-content >
+<v-content>
   <chart-drawer></chart-drawer>
   <suggestion-darwer v-if="enableSuggestionsDrawer" v-bind:suggestionsData="suggestionsData"></suggestion-darwer>
-    <v-layout row wrap>
-      <v-flex wrap xs12 sm12 md12 lg12 xl12>
+    <v-layout row wrap justify-space-around>
+      <v-flex md11>
         <v-card>
         <y-player v-bind:videoData="videoData"></y-player>
         </v-card>
@@ -58,7 +58,10 @@ export default {
         numberOfViews:'',
         numberOfLikes:'',
         numberOfDislikes:'',
-        numberOfComments:''
+        numberOfComments:'',
+        channelUrl:'',
+        channelTitle:'',
+        videoDescription:''
       },
       suggestionsData:null,
       enableSuggestionsDrawer:false
@@ -72,23 +75,30 @@ export default {
       this.items = results.items;
       window.document.documentElement.scrollTop = 0;
     },
-    playVid : function(key) {
-      this.videoData.videoTitle = key.snippet.title;
-      this.videoData.numberOfViews = key.statistics.viewCount;
-      this.videoData.numberOfLikes = key.statistics.likeCount;
-      this.videoData.numberOfDislikes = key.statistics.dislikeCount;
-      this.videoData.numberOfComments = key.statistics.commentCount;
-      this.startPlay = true;
-      EventBus.$emit('playVideo',key.id);
-      EventBus.$emit('fetchComments',key.id);
-      this.videoStopped = false;
-      window.document.documentElement.scrollTop = 0;
-      EventBus.$emit('fetchSuggestions',key.id);
+    playVid(key) {
+      console.log(key);
+      all.fetchChannelDetails(key.snippet.channelId).then((result)=>{
+        this.videoData.channelTitle = key.snippet.channelTitle;
+        this.videoData.channelUrl = result.items[0].snippet.thumbnails.default.url;
+        this.videoData.videoTitle = key.snippet.title;
+        this.videoData.numberOfViews = key.statistics.viewCount;
+        this.videoData.numberOfLikes = key.statistics.likeCount;
+        this.videoData.numberOfDislikes = key.statistics.dislikeCount;
+        this.videoData.numberOfComments = key.statistics.commentCount;
+        this.videoData.videoDescription = key.snippet.description;
+        this.startPlay = true;
+        EventBus.$emit('playVideo',key.id);
+        EventBus.$emit('fetchComments',key.id);
+        this.videoStopped = false;
+        window.document.documentElement.scrollTop = 0;
+        EventBus.$emit('fetchSuggestions',key.id);
+      })
+      console.log(key);
+      
       
     },
     addToSuggestions : function(response){
       this.suggestionsData = response.items;
-      console.log(this.suggestionsData);
       this.enableSuggestionsDrawer = true;
     }
   },
@@ -167,6 +177,9 @@ export default {
   font-weight:200;
   font-stretch:narrower;
   font-size: smaller;
+}
+mainContent{
+
 }
 
 </style>

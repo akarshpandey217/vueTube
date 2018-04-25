@@ -3,28 +3,42 @@
   <div v-show="showVid" class="videowrapper">
     <div id="youPlayer"></div>
   </div>
-  <div v-if="showVid" class="vidDetails">
+  <div v-if="showVid" class="card vidDetails pb-3">
     <v-layout row wrap>
       <v-flex>
-        <v-card>
-          <div>
-            <h1 class="videoTitle">{{videoData.videoTitle}}</h1>
-            <div>
-            <h3>{{videoData.numberOfViews}} views</h3>
-            <div class="videoStats xs6" style="text-align:right">
-              <v-icon>thumb_up</v-icon>
-              &nbsp;{{videoData.numberOfLikes}} 
-              &nbsp;&nbsp;&nbsp;
-              <v-icon >thumb_down</v-icon>
-              &nbsp;{{videoData.numberOfDislikes}}
-            </div>
-            </div>
+          <div class="videoTitle ml-3 row">
+            <h1 >{{videoData.videoTitle}}</h1>
+            <v-layout row wrap xs12 lg12 md12 sm12>
+              <v-flex><h3 style="max-block-size:0px">{{videoData.numberOfViews}} views</h3>
+              <div class="pr-3" style="text-align:right;font-family: 'Nunito', sans-serif;">
+                <v-icon>thumb_up</v-icon>
+                  &nbsp;{{videoData.numberOfLikes}} 
+                  &nbsp;&nbsp;&nbsp;
+                  <v-icon >thumb_down</v-icon>
+                  &nbsp;{{videoData.numberOfDislikes}}
+              </div>
+              </v-flex>
+            </v-layout>
+              <div class="card mt-2" style="display:inline-block;border-radius:25px">
+              <v-avatar size="40" class="pb-2" style="padding-top:10px">
+                <img v-bind:src="videoData.channelUrl"/>
+              </v-avatar>
+              <h3 style="display:inline-block;vertical-align:middle;padding-right:10px">{{videoData.channelTitle}}</h3>
           </div>
-          
+            </div>
+            <v-expansion-panel popout expand-icon="none" class="" v-if="showVid">
+      <v-expansion-panel-content style="font-family: 'Nunito', sans-serif;">
+        <div slot="header" style="text-align:center">Show Description</div>
+        <v-card>
+          <v-card-text v-html="videoData.videoDescription"></v-card-text>
         </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
       </v-flex>
     </v-layout>
+    
   </div>
+  
 </div>
 </template>
 
@@ -95,14 +109,14 @@ export default {
     width: 100%;
     height: 100%;
 }
-#youplayer{
-  max-width: 1280px;
-}
 .icon{
   vertical-align:middle;
 }
 .videoTitle{
   font-family: 'Nunito', sans-serif;
+}
+.header__icon{
+  display: none;
 }
 </style>
 

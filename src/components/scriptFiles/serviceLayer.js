@@ -22,7 +22,6 @@ function initiate() {
   }
 }
 function search(searchText,relatedToVideoId,maxResults = 24 ) {
-  console.log(relatedToVideoId);
   return initiate().then(() => {
     return Promise.resolve(
       window.gapi.client.youtube.search.list({
@@ -87,7 +86,7 @@ function fetchStats(videoIdList) {
   return initiate().then(() => {
     return Promise.resolve(
       window.gapi.client.youtube.videos.list({
-        part: "statistics",
+        part: "snippet,statistics",
         id:videoIdList
       })
     )
@@ -120,6 +119,36 @@ function fetchComments(videoId,channelId,order = "relevance") {
       });
   });
 }
+function fetchReplies(parentId,nextPageToken){
+  return initiate().then(()=>{
+    return Promise.resolve(
+      window.gapi.client.youtube.comments.list({
+        part: "snippet",
+        maxResults: 5,
+        parentId : parentId,
+        pageToken: nextPageToken
+      })
+    ).then(response=>{
+      return response.result;
+    }).catch(reason=>{
+      return reason.result.error.message;
+    })
+  })
+}
+function fetchChannelDetails(channelId){
+  return initiate().then(()=>{
+    return Promise.resolve(
+      window.gapi.client.youtube.channels.list({
+        part: "snippet",
+        id: channelId
+      })
+    ).then(response=>{
+      return response.result;
+    }).catch(reason=>{
+      return reason.result.error.message;
+    })
+  })
+}
 export default {
-  search,searchCharts, fetchComments, fetchStats
+  search,searchCharts, fetchComments, fetchStats, fetchReplies, fetchChannelDetails
 };

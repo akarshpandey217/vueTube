@@ -10,7 +10,7 @@
       >
       <v-content style="padding-top:0px">
           <v-layout  wrap row justify-center="true" >
-            <v-flex style="padding:3px" xs6 justify-space-between="true" v-for="result in suggestionsData" :key="result.id">
+            <v-flex style="padding:3px" justify-space-between="true" v-for="result in suggestionsData" :key="result.id">
              <v-card style="height:100%">
                 <img v-on:click="playVid(result)" v-bind:src= "result.snippet.thumbnails.medium.url" style="width:100%;cursor:pointer"/>
                 <v-card-text>
