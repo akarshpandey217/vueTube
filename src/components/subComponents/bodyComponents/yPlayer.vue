@@ -1,9 +1,12 @@
 <template>
 <div>
+  <transition name="fade">
   <div v-show="showVid" class="videowrapper">
     <div id="youPlayer"></div>
   </div>
-  <div v-if="showVid" class="card vidDetails pb-3">
+  </transition>
+  <transition name="fade">
+  <div v-show="showVid" class="card vidDetails pb-3">
     <v-layout row wrap>
       <v-flex>
           <div class="videoTitle ml-3 row">
@@ -28,9 +31,9 @@
             </div>
             <v-expansion-panel popout expand-icon="none" class="" v-if="showVid">
       <v-expansion-panel-content style="font-family: 'Nunito', sans-serif;">
-        <div slot="header" style="text-align:center">Show Description</div>
+        <div slot="header" @click=" descriptionText = (descriptionText=='Show Description')?'Hide Description':'Show Description'" style="text-align:center">{{descriptionText}}</div>
         <v-card>
-          <v-card-text v-html="videoData.videoDescription"></v-card-text>
+          <v-card-text style="white-space: pre-line" v-html="convertLinks(videoData.videoDescription)"></v-card-text>
         </v-card>
       </v-expansion-panel-content>
     </v-expansion-panel>
@@ -38,19 +41,21 @@
     </v-layout>
     
   </div>
-  
+  </transition>
 </div>
 </template>
 
 <script>
 import { EventBus } from '../../scriptFiles/eventBus'
+import linkMaker from 'anchorme'
 export default {
   name: 'yPlayer',
   props:['videoData'],
   data(){
     return{
       videoId:'',
-      showVid:false
+      showVid:false,
+      descriptionText:null
     }
   },
   methods:{
@@ -58,7 +63,10 @@ export default {
       return window.onYouTubeIframeAPIReady().then((resolve)=>{
                 return Promise.resolve(resolve);
               })
-  }
+    },
+    convertLinks(desciptionText){
+      return linkMaker(desciptionText);
+    }
   },
   mounted() {
       var tag = document.createElement('script');
@@ -80,6 +88,7 @@ export default {
       this.videoId = videoId;
       this.playVideo().then((resolve)=>{
         resolve.loadVideoById(this.videoId, 0, "large");
+        this.descriptionText = "Show Description";
         this.showVid=true;});
     });
     EventBus.$on("stopVideo",() => {
@@ -117,6 +126,12 @@ export default {
 }
 .header__icon{
   display: none;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>
 

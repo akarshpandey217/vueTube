@@ -8,9 +8,10 @@
         width = 350 
         floating
       >
-      <v-content style="padding-top:0px">
+      
           <v-layout  wrap row justify-center="true" >
-            <v-flex style="padding:3px" justify-space-between="true" v-for="result in suggestionsData" :key="result.id">
+              <transition-group name="fade" class="container">
+            <v-flex md6 lg6 xl6 style="padding:3px" justify-space-between="true" v-for="result in suggestionsData" :key="result.id">
              <v-card style="height:100%">
                 <img v-on:click="playVid(result)" v-bind:src= "result.snippet.thumbnails.medium.url" style="width:100%;cursor:pointer"/>
                 <v-card-text>
@@ -25,8 +26,8 @@
                 </v-card-text> 
               </v-card>
             </v-flex>
+          </transition-group>
           </v-layout>
-  </v-content>
       </v-navigation-drawer>
 </template>
 
@@ -56,4 +57,16 @@ export default {
     }
 }
 </script>
+<style>
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+</style>
 

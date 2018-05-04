@@ -1,4 +1,5 @@
 <template>
+<transition name="fade">
  <v-layout row class="mt-3" >
               <v-flex xs12 sm12 md12 lg12 xl12>
                   <v-card v-for="item in comments" :key="item.id" class="comments mt-2" >
@@ -15,6 +16,7 @@
                         <v-icon class="like" color="red">thumb_down</v-icon>
                         &nbsp;{{item.snippet.topLevelComment.snippet.dislikeCount?item.snippet.topLevelComment.snippet.dislikeCount:0}}
                     </div>
+                    <transition name="fade">
                     <div v-if="item.replies && item.showReply">
                         <div style="padding-left:50px" v-if="item.replies" v-for="reply in item.commentReplies" :key="reply.id">
                             <v-divider :key="reply.id"></v-divider>
@@ -32,11 +34,13 @@
                     </div>
                         </div>
                     </div>
+                    </transition>
                     <strong  @click="fetchReplies(item)" v-if="item.replies && item.snippet.totalReplyCount-item.commentReplies.length>0" class = "ml-5" style="color:red">{{`Show ${item.snippet.totalReplyCount-item.commentReplies.length} replies`}}</strong>
                     <v-divider :key="item.id"></v-divider>
                   </v-card>
               </v-flex>
           </v-layout>
+</transition>
 </template>
 <script>
 import { EventBus } from '../../scriptFiles/eventBus'

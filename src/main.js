@@ -8,8 +8,6 @@ import 'vuetify/dist/vuetify.min.css'
 import _ from 'lodash'
 import array from 'lodash/array'
 import object from 'lodash/fp/object'
-import Vuebar from 'vuebar'
-
 
 
 Vue.config.productionTip = false
@@ -17,7 +15,6 @@ Vue.use(Vuetify);
 Vue.use(_);
 Vue.use(array);
 Vue.use(object);
-Vue.use(Vuebar);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

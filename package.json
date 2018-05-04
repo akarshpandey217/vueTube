@@ -12,10 +12,13 @@
   },
   "dependencies": {
     "@mdi/font": "^2.2.43",
+    "anchorme": "^1.1.2",
     "axios": "^0.18.0",
     "bootstrap-vue": "^2.0.0-rc.4",
+    "linkifyjs": "^2.1.6",
     "lodash": "^4.17.5",
     "vue": "^2.5.2",
+    "vue-infinite-loading": "^2.3.1",
     "vue-router": "^3.0.1",
     "vue-touch": "^1.1.0",
     "vue-youtube-embed": "^2.1.3",

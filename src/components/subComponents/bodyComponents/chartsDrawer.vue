@@ -34,7 +34,7 @@
       <br/>
       <br/>
       <div style="padding-left:20px;">
-          <v-switch @click="changeTheme" color="light" v-bind:append-icon="darkIcon" ripple v-model="themeToggleSwitch" label="Toggle Theme"></v-switch>
+          <v-switch @click="changeTheme" color="light" :append-icon="light?'brightness_2':'wb_sunny'" ripple v-model="themeToggleSwitch" label="Toggle Theme"></v-switch>
       </div>
       </v-navigation-drawer>
 </template>
@@ -52,9 +52,9 @@ export default {
             { icon: 'fas fa-flask', text: 'Technology' }
         ],
         themeToggleSwitch:false,
-        icon:'far fa-moon',
-        darkIcon:'fas fa-moon',
-        lightIcon:'fas fa-sun'
+        darkIcon:'brightness_2',
+        lightIcon:'wb_sunny',
+        light:false
         };
     },
     methods: {
@@ -62,6 +62,7 @@ export default {
             EventBus.$emit('searchCharts',key);
         },
         changeTheme(){
+          this.light= !this.light;
           EventBus.$emit('changeTheme');
           this.icon = this.icon ==this.darkIcon?this.lightIcon:this.darkIcon;
         }

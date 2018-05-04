@@ -19,14 +19,12 @@ export default {
     },
     data(){
         return{
-          name:''
+          name:'',
         }
     }
 }
 
 </script>
 <style>
-::-webkit-scrollbar { 
-}
 </style>
 

@@ -24,7 +24,8 @@
           v-model="searchText"
         ></v-text-field>
       </v-layout>
-      <v-toolbar-side-icon v-if="enableSuggestionsDrawer" v-on:click="toggleDrawer(2)" ></v-toolbar-side-icon>
+      <v-btn icon v-if="enableSuggestionsDrawer" @click="toggleDrawer(2)"><v-icon>fas fa-bullseye</v-icon></v-btn>
+      
     </v-toolbar>
 </div>
 </template>

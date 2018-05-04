@@ -30,7 +30,7 @@ function search(searchText,relatedToVideoId,maxResults = 24 ) {
         maxResults: maxResults,
         relatedToVideoId: relatedToVideoId,
         type: "video",
-        regionCode: 'IN'
+        regionCode: 'IN',
       })
     )
       .then(response => {
@@ -41,7 +41,7 @@ function search(searchText,relatedToVideoId,maxResults = 24 ) {
       });
   });
 }
-function searchCharts(searchChartText) {
+function searchCharts(searchChartText,nextPageToken) {
   var categoryId=''
     switch(searchChartText.toLowerCase()){
       case "music":
