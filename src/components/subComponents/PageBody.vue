@@ -4,7 +4,9 @@
   <suggestion-darwer v-if="enableSuggestionsDrawer" v-bind:suggestionsData="suggestionsData"></suggestion-darwer>
     <v-layout row wrap justify-space-around style="padding-top:10px">
       <v-flex md11 lg11 xl11>
-        <v-card>
+        <player-View v-bind:videoData="videoData" v-bind:videoStopped="videoStopped"/>
+        <thumb-View v-bind:items = "items" v-show="videoStopped"/>
+        <!-- <v-card>
         <y-player v-bind:videoData="videoData"></y-player>
         </v-card>
         <v-card v-show="videoStopped" >
@@ -33,7 +35,7 @@
         </v-card>
         <transition name="fade" mode="out-in">
         <v-comments v-show="!videoStopped"></v-comments>
-        </transition>
+        </transition> -->
       </v-flex>
     </v-layout>
   </v-content>
@@ -48,13 +50,17 @@ import chartDrawer from './bodyComponents/chartsDrawer';
 import suggestionsDrawer from './bodyComponents/suggestionsDrawer';
 import videoComments from './bodyComponents/videoComments';
 import InfiniteLoading from 'vue-infinite-loading'; 
+import pView from "./bodyComponents/playerView";
+import mView from "./bodyComponents/thumbView";
 export default {
   name: "PageBody",
   components:{
-    'y-player':yPlayer,
+    //'y-player':yPlayer,
     'chart-drawer' : chartDrawer,
     'suggestion-darwer': suggestionsDrawer,
-    'v-comments': videoComments
+    //'v-comments': videoComments,
+    'player-View' : pView,
+    'thumb-View' : mView
   },
 
   data() {
@@ -126,6 +132,9 @@ export default {
     EventBus.$on("fetchSuggestions", key => {
      all.search("",key,12).then(processStatsAndShowThumbs).then(this.addToSuggestions);
     });
+    EventBus.$on("videoPlayCall", key => {
+      this.playVid(key);
+    })
 
     /*helper functions*/ 
     function processStatsAndShowThumbs(result){
