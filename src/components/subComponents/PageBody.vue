@@ -4,38 +4,9 @@
   <suggestion-darwer v-if="enableSuggestionsDrawer" v-bind:suggestionsData="suggestionsData"></suggestion-darwer>
     <v-layout row wrap justify-space-around style="padding-top:10px">
       <v-flex md11 lg11 xl11>
-        <player-View v-bind:videoData="videoData" v-bind:videoStopped="videoStopped"/>
-        <thumb-View v-bind:items = "items" v-show="videoStopped"/>
-        <!-- <v-card>
-        <y-player v-bind:videoData="videoData"></y-player>
-        </v-card>
-        <v-card v-show="videoStopped" >
-          <v-layout  wrap row justify-center="true" >
-            
-          <transition-group name="fade" mode="out-in" class="cardContainer">
-            <v-flex class="videoFlex" justify-space-between="true" xs12 sm4 md3 lg2 xl2 v-for="result in items" :key="result.id">
-              
-              <v-card style="height:100%">
-                <img v-on:click="playVid(result)" v-bind:src= "result.snippet.thumbnails.medium.url" style="width:100%;cursor:pointer"/>
-                <v-card-text>
-                  <div v-on:click="playVid(result)" class="videoDetails">
-                  <div style="overflow: hidden;
-                            display: -webkit-box;
-                            -webkit-line-clamp: 2;
-                        -webkit-box-orient: vertical">{{result.snippet.title}}</div>
-                  <div id="text2">{{result.snippet.channelTitle}} <br></div>
-                  <div id="text2">{{result.statistics.viewCount}} views <br></div>
-                  </div>
-                </v-card-text> 
-              </v-card>
-            </v-flex>
-           
-            </transition-group>
-          </v-layout>
-        </v-card>
-        <transition name="fade" mode="out-in">
-        <v-comments v-show="!videoStopped"></v-comments>
-        </transition> -->
+        <!-- <player-View v-bind:videoData="videoData" v-bind:videoStopped="videoStopped"/>
+        <thumb-View v-bind:items = "items" v-show="videoStopped"/> -->
+        <router-view/>
       </v-flex>
     </v-layout>
   </v-content>
@@ -49,9 +20,10 @@ import yPlayer from "./bodyComponents/yPlayer";
 import chartDrawer from './bodyComponents/chartsDrawer';
 import suggestionsDrawer from './bodyComponents/suggestionsDrawer';
 import videoComments from './bodyComponents/videoComments';
-import InfiniteLoading from 'vue-infinite-loading'; 
-import pView from "./bodyComponents/playerView";
-import mView from "./bodyComponents/thumbView";
+import router from '../../router'
+//import InfiniteLoading from 'vue-infinite-loading'; 
+//import pView from "./bodyComponents/playerView";
+//import mView from "./bodyComponents/thumbView";
 export default {
   name: "PageBody",
   components:{
@@ -59,8 +31,8 @@ export default {
     'chart-drawer' : chartDrawer,
     'suggestion-darwer': suggestionsDrawer,
     //'v-comments': videoComments,
-    'player-View' : pView,
-    'thumb-View' : mView
+    // 'player-View' : pView,
+    // 'thumb-View' : mView
   },
 
   data() {
@@ -89,6 +61,7 @@ export default {
       
       this.videoStopped = true;
       this.items = results.items;
+      router.push({ name: 'defaultView', params: { items: this.items }});
       window.document.documentElement.scrollTop = 0;
       EventBus.$emit('pageLoaded');
     },
@@ -106,6 +79,7 @@ export default {
         EventBus.$emit('playVideo',key.id);
         EventBus.$emit('fetchComments',key.id);
         this.videoStopped = false;
+        router.push({ name: 'playerView', params: { videoStopped: this.videoStopped, videoData: this.videoData }, query:{id:key.id}});
         window.document.documentElement.scrollTop = 0;
         EventBus.$emit('fetchSuggestions',key.id);
       })
